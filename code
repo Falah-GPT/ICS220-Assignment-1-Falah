@@ -1,0 +1,223 @@
+from enum import Enum
+
+
+class RoomSize(Enum):
+    SMALL = "Small"
+    MEDIUM = "Medium"
+    LARGE = "Large"
+
+
+class RoomType(Enum):
+    DELUXE_KING = "Deluxe King"
+    DELUXE_TWIN = "Deluxe Twin"
+    EXECUTIVE_SUITE = "Executive Suite"
+
+
+class Reservation:
+    def __init__(self, confirmation, checkin, checkout, guestcount, status):
+        self._confirmation = confirmation
+        self._checkin = checkin
+        self._checkout = checkout
+        self._guestcount = guestcount
+        self._status = status
+
+    def setCheckin(self, checkin):
+        self._checkin = checkin
+
+    def getCheckin(self):
+        return self._checkin
+
+    def setCheckout(self, checkout):
+        self._checkout = checkout
+
+    def getCheckout(self):
+        return self._checkout
+
+    def setStatus(self, status):
+        self._status = status
+
+    def getStatus(self):
+        return self._status
+
+    def setGuestCount(self, guestcount):
+        self._guestcount = guestcount
+
+    def getGuestCount(self):
+        return self._guestcount
+
+    def makeReservation(self):
+        print("Reservation made.")
+
+    def cancelReservation(self):
+        self._status = "Cancelled"
+        print("Reservation cancelled.")
+
+    def editReservation(self):
+        print("Reservation edited.")
+
+    def viewReservation(self):
+        print(
+            f"Reservation Details: Confirmation #{self._confirmation}, Check-in: {self._checkin}, Check-out: {self._checkout}, Guests: {self._guestcount}, Status: {self._status}")
+
+
+class Room:
+    def __init__(self, number, room_type: RoomType, price, size: RoomSize, availability):
+        self._number = number
+        self._room_type = room_type
+        self._price = price
+        self._size = size
+        self._availability = availability
+
+    def setRoomType(self, room_type: RoomType):
+        self._room_type = room_type
+
+    def getRoomType(self):
+        return self._room_type
+
+    def setPrice(self, price):
+        self._price = price
+
+    def getPrice(self):
+        return self._price
+
+    def setAvailability(self, availability):
+        self._availability = availability
+
+    def getAvailability(self):
+        return self._availability
+
+    def setRoomSize(self, size: RoomSize):
+        self._size = size
+
+    def getRoomSize(self):
+        return self._size
+
+    def checkAvailability(self):
+        if self._availability:
+            print(f"Room {self._number} is available.")
+        else:
+            print(f"Room {self._number} is not available.")
+
+
+class Guest:
+    def __init__(self, guest_id, name, email, phone, birthdate):
+        self._guest_id = guest_id
+        self._name = name
+        self._email = email
+        self._phone = phone
+        self._birthdate = birthdate
+
+    def setName(self, name):
+        self._name = name
+
+    def getName(self):
+        return self._name
+
+    def setEmail(self, email):
+        self._email = email
+
+    def getEmail(self):
+        return self._email
+
+    def setPhone(self, phone):
+        self._phone = phone
+
+    def getPhone(self):
+        return self._phone
+
+    def setBirthDate(self, birthdate):
+        self._birthdate = birthdate
+
+    def getBirthDate(self):
+        return self._birthdate
+
+    def registerGuest(self):
+        print(f"Guest {self._name} registered.")
+
+    def viewReservation(self, reservation):
+        reservation.viewReservation()
+
+
+class Payment:
+    def __init__(self, tran_id, amount, payment_status):
+        self._tran_id = tran_id
+        self._amount = amount
+        self._payment_status = payment_status
+
+    def setAmount(self, amount):
+        self._amount = amount
+
+    def getAmount(self):
+        return self._amount
+
+    def setPaymentStatus(self, payment_status):
+        self._payment_status = payment_status
+
+    def getPaymentStatus(self):
+        return self._payment_status
+
+    def processPayment(self):
+        print(f"Payment of {self._amount} processed. Status: {self._payment_status}")
+
+    def calculateCharges(self):
+        print(f"Total amount: {self._amount}")
+
+        # This function calculates amount with taxes
+
+    def calculateCharges(self, tax_percentage):
+        tax_amount = self._amount * (tax_percentage / 100)
+        total_with_tax = self._amount + tax_amount
+        print(f"Total amount with {tax_percentage}% tax: {total_with_tax}")
+        self._amount = total_with_tax
+
+        # this function calculates the amount with discount
+
+    def applyDiscount(self, discount_percentage):
+        discount_amount = self._amount * (discount_percentage / 100)
+        self._amount -= discount_amount
+        print(f"Discount of {discount_percentage}% applied. New amount: {self._amount}")
+
+
+class Receipt:
+    def __init__(self, receiptid, receiptdate, amount, payment_status):
+        self._receiptid = receiptid
+        self._receiptdate = receiptdate
+        self._amount = amount
+        self._payment_status = payment_status
+
+    def setReceiptID(self, receiptid):
+        self._receiptid = receiptid
+
+    def getReceiptID(self):
+        return self._receiptid
+
+    def setReceiptDate(self, receiptdate):
+        self._receiptdate = receiptdate
+
+    def getReceiptDate(self):
+        return self._receiptdate
+
+    def printReceipt(self):
+        print(
+            f"Receipt #{self._receiptid}, Date: {self._receiptdate}, Amount: {self._amount}, Payment Status: {self._payment_status}")
+
+
+# Create two objects as examples
+
+# Example: Guest makes a reservation and payment
+guest1 = Guest(202107777, "Ahmed Saleh", "ahmed123@gmail.com", "0505524242", "1995-02-25")
+room1 = Room(901, "RoomType.DELUXE_KING", 150.00, RoomSize.LARGE, True)
+reservation1 = Reservation(2213771, "2020-01-01", "2020-01-10", 2, "Confirmed")
+
+guest1.registerGuest()
+room1.checkAvailability()
+reservation1.makeReservation()
+guest1.viewReservation(reservation1)
+
+payment1 = Payment(92341, 200.0, "Completed")
+payment1.applyDiscount(10)  # Applying a 10% discount
+payment1.calculateCharges(5)  # Applying a 5% tax
+payment1.processPayment()
+
+receipt1 = Receipt(4214, "2020-01-01", 189.0, "Completed")
+receipt1.printReceipt()
